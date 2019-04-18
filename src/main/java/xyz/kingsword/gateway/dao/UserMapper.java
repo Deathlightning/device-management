@@ -1,5 +1,6 @@
 package xyz.kingsword.gateway.dao;
 
+import org.apache.ibatis.annotations.Param;
 import xyz.kingsword.gateway.bean.User;
 
 public interface UserMapper {
@@ -16,4 +17,6 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User selectByUsername(String username);
+
+    User authentication(@Param("username") String username, @Param("password") String password);
 }

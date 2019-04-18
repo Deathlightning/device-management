@@ -3,6 +3,7 @@ package xyz.kingsword.gateway.dao;
 import xyz.kingsword.gateway.bean.Role;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RoleMapper {
     int deleteByPrimaryKey(Integer id);
@@ -18,4 +19,6 @@ public interface RoleMapper {
     int updateByPrimaryKey(Role record);
 
     List<Role> collectByUser(int userId);
+
+    Set<String> selectUrl(int userId);
 }

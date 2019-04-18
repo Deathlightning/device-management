@@ -67,7 +67,9 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, name, url
+        id,
+        name,
+        url
     </sql>
     <select id="selectByExample" parameterType="xyz.kingsword.gateway.bean.RoleExample" resultMap="BaseResultMap">
         select
@@ -184,5 +186,11 @@
         select *
         from role
         where id in (select role_id from user where id = #{id,jdbcType=INTEGER});
+    </select>
+
+    <select id="selectUrl" resultType="java.lang.String">
+        select url
+        from role
+        where id in (select role_id from user_role where user_id = #{userId,jdbcType=INTEGER})
     </select>
 </mapper>

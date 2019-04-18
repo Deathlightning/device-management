@@ -3,13 +3,19 @@ package xyz.kingsword.gateway.realm;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import xyz.kingsword.gateway.bean.User;
+import xyz.kingsword.gateway.dao.RoleMapper;
 import xyz.kingsword.gateway.dao.UserMapper;
+import xyz.kingsword.gateway.util.LoginUtil;
+import xyz.kingsword.gateway.util.SpringContextUtil;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * @author: wzh date: 2019-04-14 21:33
@@ -17,21 +23,24 @@ import java.util.Optional;
  **/
 //实现AuthorizingRealm接口用户用户认证
 public class UsernameRealm extends AuthorizingRealm {
-
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
-    //角色权限和对应权限添加
+    //用户鉴权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        Cache<Object, AuthenticationInfo> cache = super.getAuthenticationCache();
+        AuthenticationInfo authorizationInfo = cache.get("username");
         //获取登录用户名
         String name = (String) principalCollection.getPrimaryPrincipal();
         //查询用户名称
         User user = (User) Optional.ofNullable(null).orElseThrow(UnknownAccountException::new);
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-        user.getRoleList().forEach(v -> simpleAuthorizationInfo.addRole(v.getRoleName()));
-        simpleAuthorizationInfo.addStringPermissions(user.getPermissionList());
+        simpleAuthorizationInfo.addRoles(user.getRoleSet());
+        simpleAuthorizationInfo.addStringPermissions(user.getUrlSet());
         return simpleAuthorizationInfo;
     }
 
@@ -40,16 +49,15 @@ public class UsernameRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         //获取用户信息
         String username = authenticationToken.getPrincipal().toString();
-        User user = userMapper.selectByPrimaryKey(username);
-        user = Optional.ofNullable(user).orElseThrow(UnknownAccountException::new);
-        if (user == null) {
-            //这里返回后会报出对应异常
-            return null;
-        } else {
-            //这里验证authenticationToken和simpleAuthenticationInfo的信息
-            SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(getName(), user.getPassword().toString(), getName());
-            return simpleAuthenticationInfo;
-        }
-        return null;
+        String password = new String((char[]) authenticationToken.getCredentials());
+        User user = userMapper.authentication(username, password);
+        Optional.ofNullable(user).orElseThrow(() -> {
+            LoginUtil.addWrongTime(username);
+            throw new AuthenticationException();
+        });
+        Set<String> urlSet = roleMapper.selectUrl(user.getId());
+        user.setUrlSet(urlSet);
+
+        return new SimpleAuthenticationInfo(getName(), user.getPassword().toString(), getName());
     }
 }

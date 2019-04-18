@@ -69,7 +69,11 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        id, username, password, role_id, locked
+        id,
+        username,
+        password,
+        role_id,
+        locked
     </sql>
     <select id="selectByExample" parameterType="xyz.kingsword.gateway.bean.UserExample" resultMap="BaseResultMap">
         select
@@ -214,6 +218,14 @@
 
     <select id="selectByUsername" resultMap="BaseResultMap">
         select *
-        from user;
+        from user
+        where username = #{username,jdbcType=CHAR};
+    </select>
+
+    <select id="authentication" resultMap="BaseResultMap">
+        select *
+        from user
+        where username = #{username,jdbcType=CHAR}
+          and `password` = #{password,jdbcType=CHAR}
     </select>
 </mapper>

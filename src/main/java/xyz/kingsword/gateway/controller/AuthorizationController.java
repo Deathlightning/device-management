@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import xyz.kingsword.gateway.bean.ResultBean;
+import xyz.kingsword.gateway.aop.ResultBean;
 import xyz.kingsword.gateway.bean.User;
 import xyz.kingsword.gateway.service.AuthorizationService;
 

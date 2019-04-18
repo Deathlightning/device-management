@@ -20,9 +20,9 @@ public class User implements Serializable {
 
     private Boolean locked;
 
-    private Set<Role> roleList;
+    private Set<String> roleSet;
 
-    private Set<String> urlList;
+    private Set<String> urlSet;
 
     private static final long serialVersionUID = 1L;
 

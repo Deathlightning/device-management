@@ -1,9 +1,10 @@
 package xyz.kingsword.gateway.controller;
 
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.web.bind.annotation.*;
-import xyz.kingsword.gateway.bean.ExceptionEnum;
-import xyz.kingsword.gateway.bean.ResultBean;
+import xyz.kingsword.gateway.aop.ExceptionEnum;
+import xyz.kingsword.gateway.aop.ResultBean;
 import xyz.kingsword.gateway.exception.MaxWrongTimeException;
 
 @ControllerAdvice
@@ -25,6 +26,7 @@ public class ExceptionController {
         return new ResultBean<>(ExceptionEnum.UNKNOWN_ACCOUNT);
     }
 
+    @ExceptionHandler(value = LockedAccountException.class)
     @RequestMapping(value = "/locked", method = RequestMethod.GET, produces = "application/json;charset:utf-8")
     public Object locked() {
         return new ResultBean<>(ExceptionEnum.LOCKED);

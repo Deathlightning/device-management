@@ -1,5 +1,7 @@
 package xyz.kingsword.gateway.util;
 
+import xyz.kingsword.gateway.bean.User;
+import xyz.kingsword.gateway.dao.UserMapper;
 import xyz.kingsword.gateway.exception.MaxWrongTimeException;
 
 import java.util.HashMap;
@@ -21,6 +23,11 @@ public class LoginUtil {
             return map.put(k, v + 1);
         });
         map.computeIfAbsent(username, v -> map.put(v, 1));
+    }
+
+    public User authentication(String username, String password) {
+        UserMapper userMapper = SpringContextUtil.getBean(UserMapper.class);
+        userMapper.selectByPrimaryKey(username);
     }
 
 }

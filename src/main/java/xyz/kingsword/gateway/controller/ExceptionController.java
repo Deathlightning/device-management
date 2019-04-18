@@ -4,12 +4,13 @@ import org.apache.shiro.authz.UnauthenticatedException;
 import org.springframework.web.bind.annotation.*;
 import xyz.kingsword.gateway.bean.ExceptionEnum;
 import xyz.kingsword.gateway.bean.ResultBean;
+import xyz.kingsword.gateway.exception.MaxWrongTimeException;
 
 @ControllerAdvice
 @RestController
 public class ExceptionController {
     @ExceptionHandler(UnauthenticatedException.class)
-    @RequestMapping(value = "/unAuthorized", method = RequestMethod.GET, produces = "application/json;charset:utf-8")
+    @RequestMapping(value = "/unAuthorization", method = RequestMethod.GET, produces = "application/json;charset:utf-8")
     public Object unauthorizedException() {
         return new ResultBean<>(ExceptionEnum.UNAUTHORIZED);
     }
@@ -32,6 +33,12 @@ public class ExceptionController {
     @RequestMapping(value = "/unAuthentication", method = RequestMethod.GET, produces = "application/json;charset:utf-8")
     public Object unAuthentication() {
         return new ResultBean<>(ExceptionEnum.UNKNOWN_ACCOUNT);
+    }
+
+    @ExceptionHandler(MaxWrongTimeException.class)
+    @RequestMapping(value = "/maxWrongTime", method = RequestMethod.GET, produces = "application/json;charset:utf-8")
+    public Object MaxWrongTimeController() {
+        return new ResultBean<>(ExceptionEnum.MAX_WRONG_TIMES);
     }
 
 }

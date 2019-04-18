@@ -22,4 +22,8 @@ public class ResultBean<T> implements Serializable {
         this.message = exceptionEnum.getMessage();
     }
 
+    public ResultBean(){
+        this.code=0;
+    }
+
 }

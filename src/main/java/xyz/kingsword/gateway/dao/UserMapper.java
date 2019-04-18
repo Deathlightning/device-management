@@ -1,18 +1,19 @@
 package xyz.kingsword.gateway.dao;
 
-
 import xyz.kingsword.gateway.bean.User;
 
 public interface UserMapper {
-    int deleteByPrimaryKey(String username);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(User record);
 
     int insertSelective(User record);
 
-    User selectByPrimaryKey(String username);
+    User selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    User selectByUsername(String username);
 }

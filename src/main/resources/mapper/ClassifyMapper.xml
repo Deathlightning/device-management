@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.PermissionMapper">
-  <resultMap id="BaseResultMap" type="bean.Permission">
-    <id column="username" jdbcType="CHAR" property="username" />
-    <result column="password" jdbcType="CHAR" property="password" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="last_login" jdbcType="DATE" property="lastLogin" />
+<mapper namespace="xyz.kingsword.gateway.mapper.ClassifyMapper">
+  <resultMap id="BaseResultMap" type="xyz.kingsword.gateway.bean.Classify">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="CHAR" property="name" />
+    <result column="number" jdbcType="INTEGER" property="number" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -66,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    username, password, role_id, last_login
+    id, name, number
   </sql>
-  <select id="selectByExample" parameterType="bean.PermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="xyz.kingsword.gateway.bean.ClassifyExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from permission
+    from classify
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -82,79 +81,58 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from permission
-    where username = #{username,jdbcType=CHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from permission
-    where username = #{username,jdbcType=CHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="bean.PermissionExample">
-    delete from permission
+  <delete id="deleteByExample" parameterType="xyz.kingsword.gateway.bean.ClassifyExample">
+    delete from classify
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="bean.Permission">
-    insert into permission (username, password, role_id, 
-      last_login)
-    values (#{username,jdbcType=CHAR}, #{password,jdbcType=CHAR}, #{roleId,jdbcType=INTEGER}, 
-      #{lastLogin,jdbcType=DATE})
+  <insert id="insert" parameterType="xyz.kingsword.gateway.bean.Classify">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into classify (name, number)
+    values (#{name,jdbcType=CHAR}, #{number,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="bean.Permission">
-    insert into permission
+  <insert id="insertSelective" parameterType="xyz.kingsword.gateway.bean.Classify">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into classify
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        username,
+      <if test="name != null">
+        name,
       </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="roleId != null">
-        role_id,
-      </if>
-      <if test="lastLogin != null">
-        last_login,
+      <if test="number != null">
+        number,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        #{username,jdbcType=CHAR},
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=CHAR},
-      </if>
-      <if test="roleId != null">
-        #{roleId,jdbcType=INTEGER},
-      </if>
-      <if test="lastLogin != null">
-        #{lastLogin,jdbcType=DATE},
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="bean.PermissionExample" resultType="java.lang.Long">
-    select count(*) from permission
+  <select id="countByExample" parameterType="xyz.kingsword.gateway.bean.ClassifyExample" resultType="java.lang.Long">
+    select count(*) from classify
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update permission
+    update classify
     <set>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=CHAR},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=CHAR},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=CHAR},
       </if>
-      <if test="record.roleId != null">
-        role_id = #{record.roleId,jdbcType=INTEGER},
-      </if>
-      <if test="record.lastLogin != null">
-        last_login = #{record.lastLogin,jdbcType=DATE},
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -162,42 +140,18 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update permission
-    set username = #{record.username,jdbcType=CHAR},
-      password = #{record.password,jdbcType=CHAR},
-      role_id = #{record.roleId,jdbcType=INTEGER},
-      last_login = #{record.lastLogin,jdbcType=DATE}
+    update classify
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=CHAR},
+      number = #{record.number,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="bean.Permission">
-    update permission
-    <set>
-      <if test="password != null">
-        password = #{password,jdbcType=CHAR},
-      </if>
-      <if test="roleId != null">
-        role_id = #{roleId,jdbcType=INTEGER},
-      </if>
-      <if test="lastLogin != null">
-        last_login = #{lastLogin,jdbcType=DATE},
-      </if>
-    </set>
-    where username = #{username,jdbcType=CHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="bean.Permission">
-    update permission
-    set password = #{password,jdbcType=CHAR},
-      role_id = #{roleId,jdbcType=INTEGER},
-      last_login = #{lastLogin,jdbcType=DATE}
-    where username = #{username,jdbcType=CHAR}
-  </update>
-  <resultMap id="BaseResultMap" type="bean.Permission">
-    <id column="username" jdbcType="CHAR" property="username" />
-    <result column="password" jdbcType="CHAR" property="password" />
-    <result column="role_id" jdbcType="INTEGER" property="roleId" />
-    <result column="last_login" jdbcType="DATE" property="lastLogin" />
+  <resultMap id="BaseResultMap" type="xyz.kingsword.gateway.bean.Classify">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="CHAR" property="name" />
+    <result column="number" jdbcType="INTEGER" property="number" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -258,95 +212,82 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    username, password, role_id, last_login
+    id, name, number
   </sql>
-  <select id="selectByExample" parameterType="bean.PermissionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="xyz.kingsword.gateway.bean.ClassifyExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from permission
+    from classify
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from permission
-    where username = #{username,jdbcType=CHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from permission
-    where username = #{username,jdbcType=CHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="bean.PermissionExample">
-    delete from permission
+  <delete id="deleteByExample" parameterType="xyz.kingsword.gateway.bean.ClassifyExample">
+    delete from classify
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="bean.Permission">
-    insert into permission (username, password, role_id, 
-      last_login)
-    values (#{username,jdbcType=CHAR}, #{password,jdbcType=CHAR}, #{roleId,jdbcType=INTEGER}, 
-      #{lastLogin,jdbcType=DATE})
+  <insert id="insert" parameterType="xyz.kingsword.gateway.bean.Classify">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into classify (name, number)
+    values (#{name,jdbcType=CHAR}, #{number,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="bean.Permission">
-    insert into permission
+  <insert id="insertSelective" parameterType="xyz.kingsword.gateway.bean.Classify">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into classify
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        username,
+      <if test="name != null">
+        name,
       </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="roleId != null">
-        role_id,
-      </if>
-      <if test="lastLogin != null">
-        last_login,
+      <if test="number != null">
+        number,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="username != null">
-        #{username,jdbcType=CHAR},
+      <if test="name != null">
+        #{name,jdbcType=CHAR},
       </if>
-      <if test="password != null">
-        #{password,jdbcType=CHAR},
-      </if>
-      <if test="roleId != null">
-        #{roleId,jdbcType=INTEGER},
-      </if>
-      <if test="lastLogin != null">
-        #{lastLogin,jdbcType=DATE},
+      <if test="number != null">
+        #{number,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="bean.PermissionExample" resultType="java.lang.Long">
-    select count(*) from permission
+  <select id="countByExample" parameterType="xyz.kingsword.gateway.bean.ClassifyExample" resultType="java.lang.Long">
+    select count(*) from classify
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update permission
+    update classify
     <set>
-      <if test="record.username != null">
-        username = #{record.username,jdbcType=CHAR},
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=CHAR},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=CHAR},
       </if>
-      <if test="record.roleId != null">
-        role_id = #{record.roleId,jdbcType=INTEGER},
-      </if>
-      <if test="record.lastLogin != null">
-        last_login = #{record.lastLogin,jdbcType=DATE},
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -354,35 +295,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update permission
-    set username = #{record.username,jdbcType=CHAR},
-      password = #{record.password,jdbcType=CHAR},
-      role_id = #{record.roleId,jdbcType=INTEGER},
-      last_login = #{record.lastLogin,jdbcType=DATE}
+    update classify
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=CHAR},
+      number = #{record.number,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="bean.Permission">
-    update permission
-    <set>
-      <if test="password != null">
-        password = #{password,jdbcType=CHAR},
-      </if>
-      <if test="roleId != null">
-        role_id = #{roleId,jdbcType=INTEGER},
-      </if>
-      <if test="lastLogin != null">
-        last_login = #{lastLogin,jdbcType=DATE},
-      </if>
-    </set>
-    where username = #{username,jdbcType=CHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="bean.Permission">
-    update permission
-    set password = #{password,jdbcType=CHAR},
-      role_id = #{roleId,jdbcType=INTEGER},
-      last_login = #{lastLogin,jdbcType=DATE}
-    where username = #{username,jdbcType=CHAR}
   </update>
 </mapper>

@@ -5,12 +5,12 @@ import java.io.Serializable;
 /**
  * @author 
  */
-public class Role implements Serializable {
+public class Classify implements Serializable {
     private Integer id;
 
     private String name;
 
-    private String url;
+    private Integer number;
 
     private static final long serialVersionUID = 1L;
 
@@ -30,12 +30,12 @@ public class Role implements Serializable {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     @Override
@@ -49,10 +49,10 @@ public class Role implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        Role other = (Role) that;
+        Classify other = (Classify) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getUrl() == null ? other.getUrl() == null : this.getUrl().equals(other.getUrl()));
+            && (this.getNumber() == null ? other.getNumber() == null : this.getNumber().equals(other.getNumber()));
     }
 
     @Override
@@ -61,7 +61,7 @@ public class Role implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getUrl() == null) ? 0 : getUrl().hashCode());
+        result = prime * result + ((getNumber() == null) ? 0 : getNumber().hashCode());
         return result;
     }
 
@@ -73,7 +73,7 @@ public class Role implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
-        sb.append(", url=").append(url);
+        sb.append(", number=").append(number);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

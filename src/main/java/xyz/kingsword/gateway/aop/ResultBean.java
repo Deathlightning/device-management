@@ -1,4 +1,4 @@
-package xyz.kingsword.gateway.bean;
+package xyz.kingsword.gateway.aop;
 
 import lombok.Data;
 
